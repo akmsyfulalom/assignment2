@@ -85,9 +85,13 @@ const updateSingleUser = async (req: Request, res: Response) => {
 
     if (!result) {
       return res.status(404).json({
-        success: false,
-        message: 'User not found',
-      });
+        "success": false,
+        "message": "User not found",
+        "error": {
+            "code": 404,
+            "description": "User not found!"
+        }
+    });
     }
     res.status(200).json({
       success: true,
