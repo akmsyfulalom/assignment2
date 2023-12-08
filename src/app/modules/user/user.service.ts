@@ -12,15 +12,15 @@ const getAllUsersFromDB = async () => {
 };
 
 const getSingleUserFromDB = async (userId: number) => {
-  const result = await UserModel.findOne({ userId });
-  return result;
+    const result = await UserModel.findOne({ userId });
+    return result;
 };
 
 
 const updateSingleUserFromDB = async (userId: number, updatedData: Partial<TUser>,): Promise<TUser | null> => {
   try {
     const existingUser = await UserModel.findOne({
-        username: updatedData.username,
+        userId: updatedData.userId,
     });
 
     if(existingUser && updatedData.userId !== userId){
@@ -38,9 +38,15 @@ const updateSingleUserFromDB = async (userId: number, updatedData: Partial<TUser
   }
 };
 
+    const deleteAUserFromDB =async (userId: number) => {
+    const result = await UserModel.deleteOne({userId});
+    return result
+    }
+
 export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
   updateSingleUserFromDB,
+  deleteAUserFromDB
 };
