@@ -6,7 +6,7 @@ const userNameSchema = new Schema<TUserName>({
     type: String,
     required: [true, 'First name is required'],
     maxlength: [20, "max length can't longer 20 character"],
-    trim: true,
+    trim: true
   },
   lastName: {
     type: String,
@@ -34,6 +34,7 @@ const UserSchema = new Schema<TUser>({
   userId: {
     type: Number,
     required: [true, 'User id is required'],
+    unique: true
   },
   username: {
     type: String,
@@ -57,7 +58,7 @@ const UserSchema = new Schema<TUser>({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true
+    unique: true,
   },
   isActive: {
     type: Boolean,

@@ -1,26 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { userServices } from './user.service';
+import { userValidationSchema } from './user.validation';
+import { z } from 'zod';
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const { users: userData } = req.body;
-    const result = await userServices.createUserIntoDB(userData);
+    const zodData = userValidationSchema.parse(userData)
+    console.log(zodData)
+    const result = await userServices.createUserIntoDB(zodData);
+    
     res.status(200).json({
       success: true,
       message: 'User created successfully',
       data: result,
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Something went wrong',
-      error,
-    });
-    console.log(error);
+
+    if(error instanceof z.ZodError){
+      const errorMessages = error.errors.map((err) => err.message);
+
+      res.status(400).json({
+        success: false ,
+        message: 'Validation error',
+        error: errorMessages
+      })
+    }else{
+      res.status(500).json({
+        success: false,
+        message: error.message || 'Something went wrong',
+        error,
+      });
+    }
   }
-};
+    
+  }
+ 
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
