@@ -109,4 +109,10 @@ UserSchema.pre('find', function (next) {
   next()
 });
 
+
+UserSchema.pre("findOne", function(next){
+  this.findOne().select('-password')
+  next()
+})
+
 export const UserModel = model<TUser>('User', UserSchema);
