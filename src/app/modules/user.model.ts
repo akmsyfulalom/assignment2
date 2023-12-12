@@ -105,7 +105,7 @@ UserSchema.post('save', function (doc, next) {
 
 // query
 UserSchema.pre('find', function (next) {
-  this.find().select('-password')
+  this.find().select('-password -orders')
   next()
 });
 
