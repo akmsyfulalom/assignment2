@@ -1,12 +1,15 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import { TAddress, TUser, TUserName } from './user/user.interface';
+import bcrypt from 'bcrypt';
+import config from '../config';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: [true, 'First name is required'],
     maxlength: [20, "max length can't longer 20 character"],
-    trim: true
+    trim: true,
   },
   lastName: {
     type: String,
@@ -34,7 +37,7 @@ const UserSchema = new Schema<TUser>({
   userId: {
     type: Number,
     required: [true, 'User id is required'],
-    unique: true
+    unique: true,
   },
   username: {
     type: String,
@@ -86,5 +89,24 @@ const UserSchema = new Schema<TUser>({
   },
 });
 
+UserSchema.pre('save', async function (next) {
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 
-export const UserModel = model<TUser>("User", UserSchema);
+UserSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
+});
+
+// query
+UserSchema.pre('find', function (next) {
+  this.find().select('-password')
+  next()
+});
+
+export const UserModel = model<TUser>('User', UserSchema);

@@ -8,7 +8,6 @@ const createUser = async (req: Request, res: Response) => {
   try {
     const { users: userData } = req.body;
     const zodData = userValidationSchema.parse(userData)
-    console.log(zodData)
     const result = await userServices.createUserIntoDB(zodData);
     
     res.status(200).json({
@@ -17,10 +16,8 @@ const createUser = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error: any) {
-
     if(error instanceof z.ZodError){
       const errorMessages = error.errors.map((err) => err.message);
-
       res.status(400).json({
         success: false ,
         message: 'Validation error',
