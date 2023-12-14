@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { userServices } from './user.service';
-import { userValidationSchema } from './user.validation';
-import { z } from 'zod';
+import { userOrderValidationSchema, userValidationSchema } from './user.validation';
+import {  z } from 'zod';
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -27,7 +27,10 @@ const createUser = async (req: Request, res: Response) => {
       res.status(500).json({
         success: false,
         message: error.message || 'Something went wrong',
-        error,
+        "error": {
+          "code": 500,
+          "description": "Could not create user!"
+      }
       });
     }
   }
@@ -155,10 +158,40 @@ const deleteAUser = async(req: Request, res: Response) =>{
   }
 }
 
+
+const userOrderCreate = async(req: Request, res: Response) =>{
+  try {
+    const {userId}  = req.params;
+    const orderData = req.body;
+
+    const zodParserData = userOrderValidationSchema.parse(orderData);
+
+    await userServices.usersOrdersFromDB(Number(userId), zodParserData);
+
+    res.status(200).json({
+      success: true, 
+      mesage: "Order created Successfully",
+      data: null
+    })
+
+  } catch (error: any) {
+    res.status(500).json({
+      "success": false,
+      "message": "User not found",
+      "error": {
+          "code": 404,
+          "description": "User not found!"
+      }
+    });
+  }
+}
+
+
 export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   updateSingleUser,
-  deleteAUser
+  deleteAUser,
+  userOrderCreate
 };

@@ -1,5 +1,5 @@
 import { UserModel } from '../user.model';
-import { TUser } from './user.interface';
+import { TOrder, TUser } from './user.interface';
 
 const createUserIntoDB = async (userData: TUser) => {
   const result = await UserModel.create(userData);
@@ -12,19 +12,21 @@ const getAllUsersFromDB = async () => {
 };
 
 const getSingleUserFromDB = async (userId: number) => {
-    const result = await UserModel.findOne({ userId });
-    return result;
+  const result = await UserModel.findOne({ userId });
+  return result;
 };
 
-
-const updateSingleUserFromDB = async (userId: number, updatedData: Partial<TUser>,): Promise<TUser | null> => {
+const updateSingleUserFromDB = async (
+  userId: number,
+  updatedData: Partial<TUser>,
+): Promise<TUser | null> => {
   try {
     const existingUser = await UserModel.findOne({
-        userId: updatedData.userId,
+      userId: updatedData.userId,
     });
 
-    if(existingUser && updatedData.userId !== userId){
-        throw new Error("User can't exist on this id ");
+    if (existingUser && updatedData.userId !== userId) {
+      throw new Error("User can't exist on this id ");
     }
     const result = await UserModel.findOneAndUpdate(
       { userId },
@@ -38,15 +40,32 @@ const updateSingleUserFromDB = async (userId: number, updatedData: Partial<TUser
   }
 };
 
-    const deleteAUserFromDB =async (userId: number) => {
-    const result = await UserModel.deleteOne({userId});
-    return result
-    }
+const usersOrdersFromDB = async (userId: number, order: TOrder) => {
+  if (await UserModel.isUserExists(userId)) {
+    const result = await UserModel.findOneAndUpdate(
+      { userId: userId },
+      { $push: { orders: order } },
+      { new: true },
+    );
+    return result;
+  } else {
+      throw new Error("Could't create your order");
+  }
+};
+
+
+
+
+const deleteAUserFromDB = async (userId: number) => {
+  const result = await UserModel.deleteOne({ userId });
+  return result;
+};
 
 export const userServices = {
   createUserIntoDB,
   getAllUsersFromDB,
   getSingleUserFromDB,
   updateSingleUserFromDB,
-  deleteAUserFromDB
+  deleteAUserFromDB,
+  usersOrdersFromDB,
 };

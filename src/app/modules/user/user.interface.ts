@@ -1,3 +1,4 @@
+import { Model } from "mongoose";
 
 export type TUserName ={
     firstName: string;
@@ -19,12 +20,19 @@ export type TUser = {
     isActive: boolean;
     hobbies: string[];
     address:TAddress;
-    orders?: Order[];
+    orders?: TOrder[];
   };
   
- export type Order = {
+ export type TOrder = {
     productName: string;
     price: number;
     quantity: number;
   };
+
+
+  // static method interface 
+  export interface UserStaticMethodModel extends Model<TUser>{
+    // eslint-disable-next-line no-unused-vars
+    isUserExists(id: number): Promise<TUser | null>
+  }
  
