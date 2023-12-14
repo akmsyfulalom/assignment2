@@ -74,7 +74,28 @@ const getAllOrdersFromDB = async (userId: number) => {
   
 };
 
+// Calculate Total Price of Orders for a Specific User calculateTotalPriceOfOrdersForASpecificUser
 
+const calculateTotalPriceOfOrdersForASpecificUser = async(userId: number) =>{
+  if(await UserModel.isUserExists(userId)){
+    const result = await UserModel.aggregate([
+      {$match: {userId}},
+      {$unwind: {path: '$orders', preserveNullAndEmptyArrays: true}}, 
+      {
+        $group: {
+          _id: null,
+          totalPrice: {
+            $sum: {$multiply: ['$orders.price', '$orders.quantity']}
+          }
+        }
+      }
+    ])
+    return result
+  }
+  else {
+    throw new Error('User not found');
+  }
+}
 
 
 
@@ -86,4 +107,5 @@ export const userServices = {
   deleteAUserFromDB,
   usersOrdersFromDB,
   getAllOrdersFromDB,
+  calculateTotalPriceOfOrdersForASpecificUser,
 };
