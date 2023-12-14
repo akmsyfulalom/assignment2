@@ -159,6 +159,7 @@ const deleteAUser = async(req: Request, res: Response) =>{
 }
 
 
+// create order
 const userOrderCreate = async(req: Request, res: Response) =>{
   try {
     const {userId}  = req.params;
@@ -184,6 +185,30 @@ const userOrderCreate = async(req: Request, res: Response) =>{
       }
     });
   }
+};
+
+
+// get all orders a user 
+
+const getAllOrdersAUserController = async(req: Request, res: Response)=>{
+  try {
+    const {userId} = req.params;
+    const result = await userServices.getAllOrdersFromDB(Number(userId));
+    res.status(200).json({
+      success: true,
+      message: 'Orders fetched successfully!',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to fetch orders',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
 }
 
 
@@ -193,5 +218,6 @@ export const UserControllers = {
   getSingleUser,
   updateSingleUser,
   deleteAUser,
-  userOrderCreate
+  userOrderCreate,
+  getAllOrdersAUserController
 };

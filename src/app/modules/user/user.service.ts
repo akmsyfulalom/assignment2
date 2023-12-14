@@ -39,7 +39,12 @@ const updateSingleUserFromDB = async (
     throw error;
   }
 };
-
+// delete user
+const deleteAUserFromDB = async (userId: number) => {
+  const result = await UserModel.deleteOne({ userId });
+  return result;
+};
+// create order 
 const usersOrdersFromDB = async (userId: number, order: TOrder) => {
   if (await UserModel.isUserExists(userId)) {
     const result = await UserModel.findOneAndUpdate(
@@ -53,13 +58,25 @@ const usersOrdersFromDB = async (userId: number, order: TOrder) => {
   }
 };
 
+// get all orders for a  user
 
-
-
-const deleteAUserFromDB = async (userId: number) => {
-  const result = await UserModel.deleteOne({ userId });
-  return result;
+const getAllOrdersFromDB = async (userId: number) => {
+  if(await  UserModel.isUserExists(userId)){
+    const userData = await UserModel.findOne({userId});
+    return {
+      orders: userData?.orders || []
+    }
+   
+  }
+  else {
+    throw new Error('User not found')
+  }
+  
 };
+
+
+
+
 
 export const userServices = {
   createUserIntoDB,
@@ -68,4 +85,5 @@ export const userServices = {
   updateSingleUserFromDB,
   deleteAUserFromDB,
   usersOrdersFromDB,
+  getAllOrdersFromDB,
 };
