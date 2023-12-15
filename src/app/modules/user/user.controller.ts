@@ -4,6 +4,7 @@ import { userServices } from './user.service';
 import { userOrderValidationSchema, userValidationSchema } from './user.validation';
 import {  z } from 'zod';
 
+// create user
 const createUser = async (req: Request, res: Response) => {
   try {
     const { users: userData } = req.body;
@@ -37,7 +38,7 @@ const createUser = async (req: Request, res: Response) => {
     
   }
  
-
+// get all users
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userServices.getAllUsersFromDB();
@@ -55,6 +56,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// get single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -85,7 +87,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-
+// single user update
 const updateSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -126,7 +128,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
-
+// delete user
 const deleteAUser = async(req: Request, res: Response) =>{
   try {
     const {userId} = req.params;

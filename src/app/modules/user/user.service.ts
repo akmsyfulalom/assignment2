@@ -1,25 +1,24 @@
 import { UserModel } from '../user.model';
 import { TOrder, TUser } from './user.interface';
 
+//create user
 const createUserIntoDB = async (userData: TUser) => {
   const result = await UserModel.create(userData);
   return result;
 };
-
+// get all user
 const getAllUsersFromDB = async () => {
   const result = await UserModel.find();
   return result;
 };
 
+// get single user
 const getSingleUserFromDB = async (userId: number) => {
   const result = await UserModel.findOne({ userId });
   return result;
 };
-
-const updateSingleUserFromDB = async (
-  userId: number,
-  updatedData: Partial<TUser>,
-): Promise<TUser | null> => {
+// single user update 
+const updateSingleUserFromDB = async (userId: number,updatedData: Partial<TUser>): Promise<TUser | null> => {
   try {
     const existingUser = await UserModel.findOne({
       userId: updatedData.userId,
