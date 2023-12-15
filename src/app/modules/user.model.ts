@@ -115,6 +115,14 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
+// use password exclude
+UserSchema.set('toJSON', {
+  transform: function(doc, upDate) {
+    delete upDate.password;
+    return upDate
+  }
+})
+
 UserSchema.post('save', function (doc, next) {
   doc.password = '';
 
