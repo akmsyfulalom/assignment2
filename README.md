@@ -18,7 +18,7 @@ npm run start:dev
 ```
 
 ### Routes:
-/api/v1/
+
 - Create User Endpoint: **POST /api/v1/users**
 - Get User Endpoint: **GET /api/v1/users**
 - Get User By Id Endpoint: **GET /api/v1/users/:userId**
