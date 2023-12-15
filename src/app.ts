@@ -12,7 +12,7 @@ app.use('/api/v1/users', UserRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   
-  res.send("assignment2")
+  res.send("Mongoose Express CRUD Mastery Assignment Server is running")
 })
 
 export default app;
