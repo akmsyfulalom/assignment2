@@ -27,7 +27,7 @@ const createUser = async (req: Request, res: Response) => {
     }else{
       res.status(500).json({
         success: false,
-        message: error.message || 'Something went wrong',
+        message: error.message || 'Something went wrong!',
         "error": {
           "code": 500,
           "description": "Could not create user!"
