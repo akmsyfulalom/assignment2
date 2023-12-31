@@ -119,6 +119,9 @@ UserSchema.pre('save', async function (next) {
 UserSchema.set('toJSON', {
   transform: function(doc, upDate) {
     delete upDate.password;
+    delete upDate.orders;
+    delete  upDate._id
+    delete upDate.__v
     return upDate
   }
 })
@@ -131,7 +134,15 @@ UserSchema.post('save', function (doc, next) {
 
 // query
 UserSchema.pre('find', function (next) {
-  this.find().select('-password -orders -hobbies -isActive');
+  this.find({}).projection({
+    _id: 0,
+     
+    username: 1,
+    fullName: 1,
+    age: 1,
+    email: 1,
+    address: 1,
+  });
   next();
 });
 

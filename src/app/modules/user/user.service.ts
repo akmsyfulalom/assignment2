@@ -4,7 +4,9 @@ import { TOrder, TUser } from './user.interface';
 //create user
 const createUserIntoDB = async (userData: TUser) => {
   const result = await UserModel.create(userData);
+  console.log(result)
   return result;
+  
 };
 // get all user
 const getAllUsersFromDB = async () => {
