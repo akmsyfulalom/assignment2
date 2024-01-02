@@ -36,7 +36,7 @@ const updateSingleUserFromDB = async (userId: number,updatedData: Partial<TUser>
     );
     return result;
   } catch (error) {
-    console.error('Error updating user:', error);
+    console.error('Error updating the user:', error);
     throw error;
   }
 };

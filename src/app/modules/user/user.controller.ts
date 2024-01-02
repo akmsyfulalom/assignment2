@@ -7,8 +7,8 @@ import {  z } from 'zod';
 // create user
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { users: userData } = req.body;
-    const zodData = userValidationSchema.parse(userData)
+    // const { users: userData } = ;
+    const zodData = userValidationSchema.parse(req.body)
     const result = await userServices.createUserIntoDB(zodData);
     
     res.status(200).json({
